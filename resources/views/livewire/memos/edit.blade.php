@@ -3,17 +3,19 @@
 use function Livewire\Volt\{state, mount, rules};
 use App\Models\Memo;
 
-state(['memo','title','body']);
+state(['memo','title','body','priority']);
 
 rules([
     'title' => 'required|string|max:50',
     'body' => 'required|string|max:2000',
+    'priority' => 'required|integer|min:1|max:3',
 ]);
 
 mount(function (Memo $memo) {
     $this->memo = $memo;
     $this->title = $memo->title;
     $this->body = $memo->body;
+    $this->priority = $memo->priority;
 });
 
 $update = function () {
@@ -22,6 +24,7 @@ $update = function () {
     $this->memo->update([
         'title' => $this->title,
         'body' => $this->body,
+        'priority' => $this->priority,
     ]);
 
     return redirect()->route('memos.show', $this->memo);
@@ -48,6 +51,14 @@ $update = function () {
                 <span class="error">{{ $message }}</span>
             @enderror
             <br>
+        </p>
+        <p>
+            <label for="priority">優先度</label>
+            <select wire:model="priority">
+                <option value="1">低</option>
+                <option value="2">中</option>
+                <option value="3">高</option>
+            </select>
         </p>
         <button type="submit">更新</button>
     </form>

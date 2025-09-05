@@ -3,11 +3,12 @@
 use function Livewire\Volt\{state, rules};
 use App\Models\Memo;
 
-state(['title','body']);
+state(['title','body','priority']);
 
 rules([
     'title' => 'required|string|max:50',
     'body' => 'required|string|max:2000',
+    'priority' => 'required|integer|min:1|max:3',
 ]);
 
 $store = function () {
@@ -16,6 +17,7 @@ $store = function () {
     Memo::create([
         'title' => $this->title,
         'body' => $this->body,
+        'priority' => $this->priority,
     ]);
 
     return redirect()->route('memos.index');
@@ -43,6 +45,11 @@ $store = function () {
             <br>
             <textarea wire:model="body" id="body"></textarea>
         </p>
+            <select wire:model="priority">
+                <option value="1">低</option>
+                <option value="2">中</option>
+                <option value="3">高</option>
+            </select>
         <button type="submit">登録</button>
     </form>
 </div>
